@@ -1,5 +1,5 @@
 # DBMS-COURSE---PROJECT
-# Pharmacy Prescription and Medicine Stock Management System (AuraCare Rx)
+# Pharmacy Prescription and Medicine Stock Management System (pharma care)
 
 A normalized 3NF relational database system (MySQL 8.0) and clinical web dashboard built with Python (Flask) and Tailwind CSS, featuring 3-tier Role-Based Access Control (RBAC).
 
