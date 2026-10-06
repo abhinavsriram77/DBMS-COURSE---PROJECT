@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaCare — Clinical Pharmacy & Stock Management Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-50 text-slate-800 antialiased flex h-screen overflow-hidden selection:bg-teal-500 selection:text-white">
+
+    <!-- ========================================== -->
+    <!-- AUTHENTICATION GATEWAY: LOGIN & SIGN UP -->
+    <!-- ========================================== -->
+    <div id="auth-screen"
+        class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
+        <div
+            class="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-auto relative overflow-hidden">
+            <!-- Glow Accent -->
+            <div class="absolute -top-24 -left-24 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl pointer-events-none">
+            </div>
+            <div
+                class="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none">
+            </div>
+
+            <!-- Auth Header -->
+            <div class="text-center space-y-2 relative">
+                <div
+                    class="h-14 w-14 bg-gradient-to-tr from-teal-600 via-teal-500 to-emerald-400 rounded-2xl flex items-center justify-center text-white mx-auto shadow-lg shadow-teal-500/30">
+                    <i data-lucide="cross" class="w-8 h-8"></i>
+                </div>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">PharmaCare Access</h1>
+                <p class="text-xs text-slate-500 max-w-sm mx-auto">Clinical Prescription &amp; Medicine Stock Management
+                    Suite with MySQL 9.7 Direct Integration</p>
+            </div>
+
+            <!-- Auth Tabs -->
+            <div
+                class="grid grid-cols-3 gap-1 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold text-slate-600 border border-slate-200/80">
+                <button onclick="setAuthTab('quick')" id="auth-tab-quick"
+                    class="py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all flex items-center justify-center gap-1.5">
+                    <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i>
+                    <span>1-Click Personas</span>
+                </button>
+                <button onclick="setAuthTab('login')" id="auth-tab-login"
+                    class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition-all flex items-center justify-center gap-1.5">
+                    <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+                    <span>Sign In</span>
+                </button>
+                <button onclick="setAuthTab('signup')" id="auth-tab-signup"
+                    class="py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition-all flex items-center justify-center gap-1.5">
+                    <i data-lucide="user-plus" class="w-3.5 h-3.5 text-teal-600"></i>
+                    <span>Sign Up</span>
+                </button>
+            </div>
+
+            <!-- TAB 1: 1-CLICK PERSONA LOGIN -->
+            <div id="auth-panel-quick" class="space-y-3">
+                <p class="text-[11px] text-slate-500 text-center font-medium">Select an operational persona to instantly
+                    authenticate:</p>
+
+                <div class="grid grid-cols-1 gap-2.5">
+                    <!-- Admin Persona Card -->
+                    <div onclick="loginWithPersona('Administrator')"
+                        class="p-4 border border-purple-200 hover:border-purple-400 bg-gradient-to-r from-purple-50/60 to-white hover:from-purple-50 rounded-2xl cursor-pointer transition-all flex items-center justify-between group shadow-xs">
+                        <div class="flex items-center gap-3.5">
+                            <div
+                                class="h-11 w-11 bg-gradient-to-tr from-purple-700 to-indigo-600 text-white rounded-xl flex items-center justify-center font-black text-xs shadow-md shadow-purple-500/20">
+                                YA
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-900">Y. Abhinav Sri Ram</span>
+                                    <span
+                                        class="text-[10px] font-bold bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full border border-purple-200">Administrator</span>
+                                </div>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Superuser: Master Catalog, FK Checks, Force
+                                    Cascade Clean Purge, Financial Analytics</p>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right"
+                            class="w-4 h-4 text-purple-400 group-hover:text-purple-700 group-hover:translate-x-1 transition-all"></i>
+                    </div>
+
+                    <!-- Pharmacist Persona Card -->
+                    <div onclick="loginWithPersona('Pharmacist')"
+                        class="p-4 border border-teal-200 hover:border-teal-400 bg-gradient-to-r from-teal-50/60 to-white hover:from-teal-50 rounded-2xl cursor-pointer transition-all flex items-center justify-between group shadow-xs">
+                        <div class="flex items-center gap-3.5">
+                            <div
+                                class="h-11 w-11 bg-gradient-to-tr from-teal-700 to-emerald-600 text-white rounded-xl flex items-center justify-center font-black text-xs shadow-md shadow-teal-500/20">
+                                PR
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-900">P. Rajesh</span>
+                                    <span
+                                        class="text-[10px] font-bold bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full border border-teal-200">Pharmacist</span>
+                                </div>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Dispensing Terminal: Point of Sale,
+                                    Schedule H Prescription Guard, Patient Billing</p>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right"
+                            class="w-4 h-4 text-teal-400 group-hover:text-teal-700 group-hover:translate-x-1 transition-all"></i>
+                    </div>
+
+                    <!-- Inventory Manager Persona Card -->
+                    <div onclick="loginWithPersona('Inventory Manager')"
+                        class="p-4 border border-blue-200 hover:border-blue-400 bg-gradient-to-r from-blue-50/60 to-white hover:from-blue-50 rounded-2xl cursor-pointer transition-all flex items-center justify-between group shadow-xs">
+                        <div class="flex items-center gap-3.5">
+                            <div
+                                class="h-11 w-11 bg-gradient-to-tr from-blue-700 to-sky-600 text-white rounded-xl flex items-center justify-center font-black text-xs shadow-md shadow-blue-500/20">
+                                SK
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-900">S. Kulkarni</span>
+                                    <span
+                                        class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full border border-blue-200">Inventory
+                                        Mgr</span>
+                                </div>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Procurement &amp; Stock: Inward Consignment
+                                    Lots, Batch Price Updating, Expiry Watchlist</p>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right"
+                            class="w-4 h-4 text-blue-400 group-hover:text-blue-700 group-hover:translate-x-1 transition-all"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: STANDARD LOGIN FORM -->
+            <form id="auth-panel-login" onsubmit="submitStandardLogin(event)" class="hidden space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Staff Work Email</label>
+                    <input type="email" id="login-email" required placeholder="e.g. abhinav@pharmacare.rx"
+                        class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50/50">
+                    <p class="text-[10px] text-slate-400 mt-1">Pre-registered: <code>abhinav@pharmacare.rx</code>,
+                        <code>rajesh@pharmacare.rx</code>, <code>kulkarni@pharmacare.rx</code>
+                    </p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••"
+                        class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50/50">
+                </div>
+                <button type="submit"
+                    class="w-full py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-teal-500/20 transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="log-in" class="w-4 h-4"></i> Sign In to Terminal
+                </button>
+            </form>
+
+            <!-- TAB 3: SIGN UP FORM -->
+            <form id="auth-panel-signup" onsubmit="submitStaffSignup(event)" class="hidden space-y-3.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Full Name <span
+                                class="text-rose-500">*</span></label>
+                        <input type="text" id="signup-name" required placeholder="e.g. Dr. Maya Sharma"
+                            class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Assigned Operational Role <span
+                                class="text-rose-500">*</span></label>
+                        <select id="signup-role"
+                            class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl bg-white">
+                            <option value="Pharmacist">Pharmacist (POS &amp; Dispensing)</option>
+                            <option value="Inventory Manager">Inventory Manager (Stock &amp; Intake)</option>
+                            <option value="Administrator">Administrator (Superuser Full Governance)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Work Email <span
+                                class="text-rose-500">*</span></label>
+                        <input type="email" id="signup-email" required placeholder="e.g. maya@pharmacare.rx"
+                            class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Password <span
+                                class="text-rose-500">*</span></label>
+                        <input type="password" id="signup-password" required placeholder="Choose a password"
+                            class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Staff / License ID</label>
+                        <input type="text" id="signup-staff-id" placeholder="e.g. PHARM-2026-90"
+                            class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Phone Number</label>
+                        <input type="text" id="signup-phone" placeholder="e.g. +91 98123 45678"
+                            class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl font-mono">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-teal-500/20 transition-all flex items-center justify-center gap-2 mt-2">
+                    <i data-lucide="user-check" class="w-4 h-4"></i> Commit Registration to MySQL Users Table
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- COOL SIDEBAR NAVIGATION -->
+    <!-- ========================================== -->
+    <aside class="w-64 bg-white border-r border-slate-200/90 flex flex-col justify-between shrink-0 shadow-sm z-20">
+        <div>
+            <!-- Brand Logo -->
+            <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100 bg-white">
+                <div
+                    class="h-10 w-10 bg-gradient-to-tr from-teal-600 to-emerald-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-teal-500/20">
+                    <i data-lucide="cross" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <span
+                        class="font-extrabold text-slate-900 tracking-tight text-base block leading-tight">PharmaCare</span>
+                    <span
+                        class="text-[10px] bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent font-black uppercase tracking-wider">Clinical
+                        Core v2.4</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-3 space-y-1">
+                <!-- Group 1: Clinical Operations -->
+                <p class="px-3 pt-2 pb-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Clinical
+                    Operations</p>
+
+                <button onclick="switchTab('inventory-tab')" id="nav-inventory"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all bg-teal-50 text-teal-800 border border-teal-100/80 shadow-xs">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="package" class="w-4 h-4 text-teal-600"></i>
+                        <span>Inventory &amp; Batches</span>
+                    </div>
+                    <span
+                        class="text-[10px] bg-white text-slate-600 font-mono px-1.5 py-0.5 rounded-md border border-slate-200"
+                        id="badge-nav-batches">--</span>
+                </button>
+
+                <button onclick="switchTab('pos-tab')" id="nav-pos"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all text-slate-600 hover:bg-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="shopping-cart" class="w-4 h-4 text-slate-400"></i>
+                        <span>POS &amp; Dispense</span>
+                    </div>
+                    <span id="pos-perm-badge"
+                        class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">ACTIVE</span>
+                </button>
+
+                <button onclick="switchTab('expiry-tab')" id="nav-expiry"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all text-slate-600 hover:bg-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
+                        <span>Expiry Watchlist</span>
+                    </div>
+                    <span
+                        class="text-[10px] bg-amber-50 text-amber-700 font-bold px-1.5 py-0.5 rounded-md border border-amber-200"
+                        id="badge-nav-expiry">--</span>
+                </button>
+
+                <!-- Group 2: Procurement & Stock -->
+                <p class="px-3 pt-3 pb-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Procurement
+                    &amp; Stock</p>
+
+                <button onclick="switchTab('intake-tab')" id="nav-intake"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all text-slate-600 hover:bg-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="plus-circle" class="w-4 h-4 text-slate-400"></i>
+                        <span>Inward Consignment</span>
+                    </div>
+                    <span id="intake-lock-badge"
+                        class="hidden text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-400 border border-slate-200">LOCKED</span>
+                </button>
+
+                <button onclick="switchTab('updater-tab')" id="nav-updater"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all text-slate-600 hover:bg-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="edit-3" class="w-4 h-4 text-slate-400"></i>
+                        <span>Stock &amp; Cost Revision</span>
+                    </div>
+                    <span id="updater-lock-badge"
+                        class="hidden text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-400 border border-slate-200">LOCKED</span>
+                </button>
+
+                <!-- Group 3: Governance & Audit -->
+                <p class="px-3 pt-3 pb-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Superuser
+                    &amp; Audit</p>
+
+                <button onclick="switchTab('deletion-tab')" id="nav-deletion"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all text-slate-600 hover:bg-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="trash-2" class="w-4 h-4 text-slate-400"></i>
+                        <span>Catalog Deletion (Admin)</span>
+                    </div>
+                    <span id="deletion-lock-badge"
+                        class="hidden text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-rose-50 text-rose-600 border border-rose-200">LOCKED</span>
+                </button>
+
+                <button onclick="switchTab('movements-tab')" id="nav-movements"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all text-slate-600 hover:bg-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="history" class="w-4 h-4 text-slate-400"></i>
+                        <span>Movement Audit Log</span>
+                    </div>
+                </button>
+
+                <button onclick="openProfileModal()" id="nav-profile"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-700 hover:bg-teal-50 hover:text-teal-800 border border-transparent hover:border-teal-200 mt-2">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="user" class="w-4 h-4 text-teal-600"></i>
+                        <span>My Profile Console</span>
+                    </div>
+                    <span
+                        class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-teal-50 text-teal-700 border border-teal-200">ACTIVE</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer: Clickable Profile Card -->
+        <div class="p-3 border-t border-slate-100 bg-slate-50/70">
+            <div onclick="openProfileModal()"
+                class="p-2.5 bg-white border border-slate-200/90 hover:border-teal-400 rounded-2xl flex items-center justify-between gap-2 shadow-xs cursor-pointer transition-all group">
+                <div class="flex items-center gap-2.5 truncate">
+                    <div id="user-avatar"
+                        class="h-9 w-9 bg-purple-100 text-purple-700 rounded-xl flex items-center justify-center font-black text-xs ring-2 ring-purple-200 shrink-0">
+                        YA
+                    </div>
+                    <div class="truncate">
+                        <p id="user-display-name" class="text-xs font-bold text-slate-900 truncate">Y. Abhinav Sri Ram
+                        </p>
+                        <span id="role-label"
+                            class="inline-block text-[10px] font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-1.5 py-0.2 rounded-md mt-0.5">Administrator</span>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right"
+                    class="w-4 h-4 text-slate-300 group-hover:text-teal-600 group-hover:translate-x-0.5 transition-all shrink-0"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ========================================== -->
+    <!-- MAIN WORKSPACE VIEWPORT -->
+    <!-- ========================================== -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top App Bar -->
+        <header
+            class="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between shrink-0 shadow-xs z-10">
+            <!-- Connection Status Pill -->
+            <div class="flex items-center gap-3">
+                <span
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-xs">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <strong class="font-bold">MySQL 9.7:</strong>
+                    <span class="font-mono text-emerald-950 font-semibold">pharmacydb</span>
+                </span>
+                <span class="text-xs text-slate-400 hidden lg:inline">|</span>
+                <span id="workspace-notice" class="text-xs text-slate-500 hidden md:inline">
+                    Active Workspace: <span class="font-bold text-slate-800" id="current-workspace-name">Superuser Full
+                        Governance</span>
+                </span>
+            </div>
+
+            <!-- Header Controls: Persona Switcher & Profile Buttons -->
+            <div class="flex items-center gap-2">
+                <!-- 1-Click Persona Bar -->
+                <div
+                    class="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200/80 text-xs font-medium">
+                    <span
+                        class="text-slate-400 px-2 font-semibold text-[10px] uppercase tracking-wider hidden sm:flex items-center gap-1">
+                        <i data-lucide="user-check" class="w-3.5 h-3.5"></i> Persona:
+                    </span>
+
+                    <button onclick="setRole('Admin')" id="btn-admin"
+                        class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white text-slate-900 shadow-xs font-bold flex items-center gap-1.5 transition-all text-[11px] sm:text-xs">
+                        <span class="h-2 w-2 rounded-full bg-purple-500"></span>
+                        <span>Admin</span>
+                    </button>
+
+                    <button onclick="setRole('Pharmacist')" id="btn-pharmacist"
+                        class="px-2.5 sm:px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-medium flex items-center gap-1.5 transition-all text-[11px] sm:text-xs">
+                        <span class="h-2 w-2 rounded-full bg-teal-500"></span>
+                        <span>Pharmacist</span>
+                    </button>
+
+                    <button onclick="setRole('Inventory')" id="btn-inv"
+                        class="px-2.5 sm:px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-medium flex items-center gap-1.5 transition-all text-[11px] sm:text-xs">
+                        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+                        <span>Inventory</span>
+                    </button>
+                </div>
+
+                <!-- My Profile Button -->
+                <button onclick="openProfileModal()"
+                    class="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-teal-50 to-emerald-50 hover:from-teal-100 hover:to-emerald-100 text-teal-800 border border-teal-200 rounded-xl text-xs font-bold transition-all shadow-xs">
+                    <i data-lucide="user-circle" class="w-4 h-4 text-teal-600"></i>
+                    <span class="hidden md:inline">My Profile</span>
+                </button>
+
+                <!-- Logout / Switch Account Button -->
+                <button onclick="openAuthModal()"
+                    class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl border border-transparent hover:border-rose-200 transition-all"
+                    title="Sign Out / Switch Account">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Body Workspace Content -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+            <!-- TOP CLINICAL KPI CARDS (COOL MODERN CARDS) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Card 1: Batches -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs flex items-center justify-between relative overflow-hidden group hover:border-teal-300 transition-all">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 to-emerald-400"></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Active Inventory
+                            Batches</p>
+                        <h3 id="stat-total-batches" class="text-2xl font-black text-slate-900 mt-1">--</h3>
+                        <p class="text-[11px] text-teal-600 font-bold mt-1 flex items-center gap-1">
+                            <i data-lucide="check-circle" class="w-3 h-3"></i> Live Joined in MySQL
+                        </p>
+                    </div>
+                    <div
+                        class="h-12 w-12 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <i data-lucide="boxes" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2: Units -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs flex items-center justify-between relative overflow-hidden group hover:border-blue-300 transition-all">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-400"></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Physical Units in Stock
+                        </p>
+                        <h3 id="stat-total-units" class="text-2xl font-black text-slate-900 mt-1">--</h3>
+                        <p class="text-[11px] text-slate-500 font-medium mt-1">Total physical shelf count</p>
+                    </div>
+                    <div
+                        class="h-12 w-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3: Expiry -->
+                <div onclick="switchTab('expiry-tab')"
+                    class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs flex items-center justify-between relative overflow-hidden group hover:border-amber-300 transition-all cursor-pointer">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-orange-400"></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Near-Expiry (&le; 30
+                            Days)</p>
+                        <h3 id="stat-expiring" class="text-2xl font-black text-amber-600 mt-1">--</h3>
+                        <p class="text-[11px] text-amber-700 font-bold mt-1 flex items-center gap-1">
+                            <i data-lucide="clock" class="w-3 h-3"></i> View Safety Watchlist &rarr;
+                        </p>
+                    </div>
+                    <div
+                        class="h-12 w-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+                <!-- Card 4: Schedule H -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs flex items-center justify-between relative overflow-hidden group hover:border-rose-300 transition-all">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rose-500 to-pink-400"></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-rose-500 uppercase tracking-wider">Schedule H Substances
+                        </p>
+                        <h3 id="stat-restricted" class="text-2xl font-black text-rose-600 mt-1">--</h3>
+                        <p class="text-[11px] text-rose-600 font-medium mt-1">Doctor Rx Mandatory</p>
+                    </div>
+                    <div
+                        class="h-12 w-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FLOATING TOAST NOTIFICATION -->
+            <div id="toast"
+                class="hidden p-4 rounded-2xl border text-xs font-semibold transition-all shadow-xl flex items-center justify-between">
+                <span id="toast-message"></span>
+                <button onclick="document.getElementById('toast').classList.add('hidden')"
+                    class="ml-4 text-slate-400 hover:text-slate-700">&times;</button>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- MODULE A: LIVE INVENTORY & BATCH EXPLORER -->
+            <!-- ========================================== -->
+            <section id="inventory-tab" class="space-y-4">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
+                    <div>
+                        <h2 class="text-base font-black text-slate-900 tracking-tight">Live Inventory &amp; Batch
+                            Explorer (VIEW)</h2>
+                        <p class="text-xs text-slate-500">Joined relational view: Medicines &rarr; Batches &rarr;
+                            Categories &rarr; Manufacturers.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="relative">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5"></i>
+                            <input type="text" id="inventory-search" oninput="filterInventoryTable()"
+                                placeholder="Search drug, batch #..."
+                                class="pl-8 pr-3 py-1.5 text-xs border border-slate-200 rounded-xl w-48 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50/50">
+                        </div>
+                        <select id="inventory-cat-filter" onchange="filterInventoryTable()"
+                            class="text-xs border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 bg-white">
+                            <option value="">All Categories</option>
+                        </select>
+                        <button onclick="fetchInventory()"
+                            class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table Container -->
+                <div class="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs">
+                    <div class="overflow-x-auto max-h-[550px]">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead
+                                class="bg-slate-50/80 border-b border-slate-200/80 text-slate-500 font-bold sticky top-0 z-10 backdrop-blur-xs">
+                                <tr>
+                                    <th class="py-3.5 px-4">Batch #</th>
+                                    <th class="py-3.5 px-4">Medicine Name</th>
+                                    <th class="py-3.5 px-4">Category</th>
+                                    <th class="py-3.5 px-4">Manufacturer</th>
+                                    <th class="py-3.5 px-4">Classification</th>
+                                    <th class="py-3.5 px-4 text-right">Stock</th>
+                                    <th class="py-3.5 px-4 text-right">Unit Cost</th>
+                                    <th class="py-3.5 px-4">Expiry Date</th>
+                                    <th class="py-3.5 px-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-tbody" class="divide-y divide-slate-100 text-slate-700">
+                                <tr>
+                                    <td colspan="9" class="text-center py-10 text-slate-400">Loading live inventory from
+                                        pharmacydb...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- MODULE B: POS & DISPENSE TERMINAL -->
+            <!-- ========================================== -->
+            <section id="pos-tab" class="hidden space-y-4">
+                <div
+                    class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
+                    <div>
+                        <h2 class="text-base font-black text-slate-900 flex items-center gap-2">
+                            <i data-lucide="receipt" class="w-5 h-5 text-teal-600"></i>
+                            Point of Sale (POS) &amp; Dispensing Terminal
+                        </h2>
+                        <p class="text-xs text-slate-500">Live retail checkout terminal featuring automated Schedule H
+                            clinical prescription compliance checks.</p>
+                    </div>
+                    <span
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-teal-50 text-teal-700 border border-teal-200">
+                        Terminal Operator: <span id="pos-operator-name">P. Rajesh (Pharmacist)</span>
+                    </span>
+                </div>
+
+                <!-- CLINICAL COMPLIANCE ALERT BANNER -->
+                <div id="pos-prescription-alert"
+                    class="hidden p-4 rounded-2xl border border-rose-300 bg-rose-50 text-rose-800 text-xs flex items-start gap-3 animate-pulse shadow-sm">
+                    <i data-lucide="shield-alert" class="w-5 h-5 text-rose-600 shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="font-black text-rose-950 block text-sm">Prescription Mandatory: Regulated
+                            Schedule H Substance Attached</strong>
+                        <p class="mt-0.5 font-medium leading-relaxed">This dispensing bill contains one or more
+                            restricted drugs. Pharmacy regulations mandate attaching an authorized Doctor's Prescription
+                            before completing checkout.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Left Column: Medicine Catalog (7 Cols) -->
+                    <div class="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="text-xs font-black text-slate-900 uppercase tracking-wider">Select Medicines to
+                                Dispense</h3>
+                            <input type="text" id="pos-catalog-search" oninput="filterPosCatalog()"
+                                placeholder="Quick filter drug / batch..."
+                                class="text-xs px-3.5 py-1.5 border border-slate-200 rounded-xl w-56 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50/50">
+                        </div>
+
+                        <!-- Catalog Grid for Quick Adding -->
+                        <div id="pos-catalog-list" class="space-y-2.5 max-h-[440px] overflow-y-auto pr-1">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Cart & Billing (5 Cols) -->
+                    <div
+                        class="lg:col-span-5 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-4 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <!-- Customer Selection & Quick Add -->
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="block text-xs font-bold text-slate-700">Patient / Customer</label>
+                                    <button onclick="openNewCustomerModal()"
+                                        class="text-[11px] text-teal-600 hover:text-teal-800 font-bold flex items-center gap-1">
+                                        <i data-lucide="user-plus" class="w-3 h-3"></i> + New Patient
+                                    </button>
+                                </div>
+                                <select id="pos-customer-select" onchange="onCustomerChange()"
+                                    class="w-full text-xs px-3.5 py-2 border border-slate-200 rounded-xl bg-white focus:ring-2 focus:ring-teal-500">
+                                    <option value="">-- Choose Patient / Customer --</option>
+                                </select>
+                            </div>
+
+                            <!-- Doctor Prescription Selection -->
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="block text-xs font-bold text-slate-700">
+                                        Doctor Prescription <span id="pos-rx-required-indicator"
+                                            class="text-rose-600 font-black hidden">*REQUIRED</span>
+                                    </label>
+                                    <button onclick="openNewPrescriptionModal()"
+                                        class="text-[11px] text-teal-600 hover:text-teal-800 font-bold flex items-center gap-1">
+                                        <i data-lucide="file-plus" class="w-3 h-3"></i> + Link Doctor Rx
+                                    </button>
+                                </div>
+                                <select id="pos-prescription-select" onchange="checkCompliance()"
+                                    class="w-full text-xs px-3.5 py-2 border border-slate-200 rounded-xl bg-white focus:ring-2 focus:ring-teal-500">
+                                    <option value="">-- No Prescription Linked (OTC Only) --</option>
+                                </select>
+                            </div>
+
+                            <!-- Dispensing Items Table -->
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-700 mb-2">Dispensing Items Bill</h4>
+                                <div class="border border-slate-200/90 rounded-xl overflow-hidden">
+                                    <table class="w-full text-xs text-left">
+                                        <thead
+                                            class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200/80">
+                                            <tr>
+                                                <th class="py-2.5 px-3">Item</th>
+                                                <th class="py-2.5 px-2 text-center">Qty</th>
+                                                <th class="py-2.5 px-2 text-right">Price</th>
+                                                <th class="py-2.5 px-2 text-right">Subtotal</th>
+                                                <th class="py-2.5 px-2 text-center"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="pos-cart-tbody" class="divide-y divide-slate-100 text-slate-700">
+                                            <tr>
+                                                <td colspan="5" class="py-6 text-center text-slate-400">Cart is empty.
+                                                    Select medicines from the catalog to bill.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Payment Method -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Payment Method</label>
+                                <div class="grid grid-cols-4 gap-2">
+                                    <label
+                                        class="border border-slate-200 p-2 rounded-xl text-center cursor-pointer text-xs font-semibold has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50 has-[:checked]:text-teal-800 transition-all">
+                                        <input type="radio" name="payment_method" value="Cash" checked class="hidden">
+                                        Cash
+                                    </label>
+                                    <label
+                                        class="border border-slate-200 p-2 rounded-xl text-center cursor-pointer text-xs font-semibold has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50 has-[:checked]:text-teal-800 transition-all">
+                                        <input type="radio" name="payment_method" value="UPI" class="hidden"> UPI
+                                    </label>
+                                    <label
+                                        class="border border-slate-200 p-2 rounded-xl text-center cursor-pointer text-xs font-semibold has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50 has-[:checked]:text-teal-800 transition-all">
+                                        <input type="radio" name="payment_method" value="Credit Card" class="hidden">
+                                        Card
+                                    </label>
+                                    <label
+                                        class="border border-slate-200 p-2 rounded-xl text-center cursor-pointer text-xs font-semibold has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50 has-[:checked]:text-teal-800 transition-all">
+                                        <input type="radio" name="payment_method" value="Debit Card" class="hidden">
+                                        Debit
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grand Total & Checkout Action -->
+                        <div class="pt-4 border-t border-slate-200 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Grand
+                                    Total:</span>
+                                <span class="text-2xl font-black text-slate-900 font-mono"
+                                    id="pos-grand-total">₹0.00</span>
+                            </div>
+
+                            <button id="pos-checkout-btn" onclick="executePosCheckout()"
+                                class="w-full py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-teal-500/20 transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Complete Checkout &amp; Commit Sale
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- EXPIRY WATCHLIST & ALERT DASHBOARD -->
+            <!-- ========================================== -->
+            <section id="expiry-tab" class="hidden space-y-4">
+                <div
+                    class="bg-gradient-to-r from-amber-50 to-orange-50/50 border border-amber-200 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+                    <div class="flex items-center gap-3.5">
+                        <div
+                            class="h-11 w-11 bg-amber-500 text-white rounded-xl flex items-center justify-center font-bold shadow-md shadow-amber-500/20">
+                            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-black text-amber-950">Near-Expiry &amp; Safety Watchlist</h2>
+                            <p class="text-xs text-amber-700 font-medium">Real-time surveillance of stock batches with
+                                &le; 30 days remaining to prevent dispensing expired drugs.</p>
+                        </div>
+                    </div>
+                    <button onclick="fetchNearExpiry()"
+                        class="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors">
+                        Scan Batches Now
+                    </button>
+                </div>
+
+                <div class="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200/80">
+                                <tr>
+                                    <th class="py-3.5 px-4">Batch #</th>
+                                    <th class="py-3.5 px-4">Medicine Name</th>
+                                    <th class="py-3.5 px-4">Category</th>
+                                    <th class="py-3.5 px-4">Manufacturer</th>
+                                    <th class="py-3.5 px-4 text-right">Stock</th>
+                                    <th class="py-3.5 px-4">Expiry Date</th>
+                                    <th class="py-3.5 px-4">Days Remaining</th>
+                                    <th class="py-3.5 px-4">Status</th>
+                                    <th class="py-3.5 px-4 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expiry-tbody" class="divide-y divide-slate-100 text-slate-700">
+                                <tr>
+                                    <td colspan="9" class="py-8 text-center text-slate-400">Loading safety scan...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- MODULE C: INWARD STOCK INTAKE -->
+            <!-- ========================================== -->
+            <section id="intake-tab" class="hidden space-y-4">
+                <div
+                    class="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base font-black text-slate-900">Inward Stock Intake (INSERT)</h2>
+                        <p class="text-xs text-slate-500">Register new batch consignments received from pharmaceutical
+                            distributors into MySQL.</p>
+                    </div>
+                    <span
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                        Authorized: Inventory Manager &amp; Administrator
+                    </span>
+                </div>
+
+                <div class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs max-w-3xl">
+                    <form onsubmit="submitInwardIntake(event)" class="space-y-4">
+                        <!-- Medicine Mode Toggle -->
+                        <div class="flex items-center gap-4 border-b border-slate-100 pb-3">
+                            <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700">
+                                <input type="radio" name="medicine_mode" value="new" checked
+                                    onchange="toggleMedicineMode()" class="text-teal-600">
+                                <span>Register New Drug in Catalog</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-700">
+                                <input type="radio" name="medicine_mode" value="existing"
+                                    onchange="toggleMedicineMode()" class="text-teal-600">
+                                <span>Intake for Existing Drug in Catalog</span>
+                            </label>
+                        </div>
+
+                        <!-- Existing Drug Selector -->
+                        <div id="intake-existing-group" class="hidden">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Select Existing Medicine</label>
+                            <select id="intake-existing-med"
+                                class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl bg-white"></select>
+                        </div>
+
+                        <!-- New Drug Fields -->
+                        <div id="intake-new-group" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Medicine Name <span
+                                        class="text-rose-500">*</span></label>
+                                <input type="text" id="intake-name" placeholder="e.g. Cefixime 200mg"
+                                    class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Category <span
+                                        class="text-rose-500">*</span></label>
+                                <select id="intake-category"
+                                    class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl bg-white"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Manufacturer <span
+                                        class="text-rose-500">*</span></label>
+                                <select id="intake-manufacturer"
+                                    class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl bg-white"></select>
+                            </div>
+                            <div class="flex items-center pt-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="intake-restricted" class="h-4 w-4 text-teal-600 rounded">
+                                    <span class="text-xs font-bold text-rose-700">Schedule H (Requires
+                                        Prescription)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Consignment Tuple -->
+                        <div class="pt-2 border-t border-slate-100">
+                            <h4 class="text-xs font-bold text-slate-800 mb-3 uppercase tracking-wider">Consignment Batch
+                                Tuple</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Distributor / Supplier
+                                        <span class="text-rose-500">*</span></label>
+                                    <select id="intake-supplier"
+                                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl bg-white"></select>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <label class="block text-xs font-bold text-slate-700">Batch Number <span
+                                                class="text-rose-500">*</span></label>
+                                        <button type="button" onclick="autoGenerateBatchNumber()"
+                                            class="text-[10px] text-teal-600 font-bold hover:underline">Auto
+                                            Generate</button>
+                                    </div>
+                                    <input type="text" id="intake-batch" required placeholder="e.g. B-CEF-501"
+                                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Received Quantity (Units)
+                                        <span class="text-rose-500">*</span></label>
+                                    <input type="number" id="intake-quantity" required min="1" value="100"
+                                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Unit Cost Price (₹) <span
+                                            class="text-rose-500">*</span></label>
+                                    <input type="number" step="0.01" id="intake-cost" required min="0.1" value="12.50"
+                                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Expiry Date <span
+                                            class="text-rose-500">*</span></label>
+                                    <input type="date" id="intake-expiry" required value="2028-12-31"
+                                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-teal-500/20 transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="save" class="w-4 h-4"></i> Commit Batch Tuple &amp; 'Stock In' to MySQL
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- MODULE D: BATCH STOCK & PRICE UPDATE -->
+            <!-- ========================================== -->
+            <section id="updater-tab" class="hidden space-y-4">
+                <div
+                    class="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base font-black text-slate-900">Batch Stock &amp; Price Revision (UPDATE)</h2>
+                        <p class="text-xs text-slate-500">Executes
+                            <code>UPDATE Batches SET StockQuantity = %s, UnitCost = %s WHERE BatchID = %s</code>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs max-w-md">
+                    <form onsubmit="submitUpdate(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Select Target Batch</label>
+                            <select id="update-batch-select" onchange="onBatchSelectForUpdate()"
+                                class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl bg-white">
+                                <option value="">-- Choose Batch to Revise --</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">New Physical Stock
+                                Quantity</label>
+                            <input type="number" id="update-stock" required min="0" placeholder="e.g. 150"
+                                class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">New Unit Cost (₹)</label>
+                            <input type="number" step="0.01" id="update-cost" required min="0.01"
+                                placeholder="e.g. 11.20"
+                                class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl font-mono">
+                        </div>
+                        <button type="submit"
+                            class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4"></i> Execute UPDATE Statement in MySQL
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- MODULE E: CATALOG DELETION (ADMIN ONLY) -->
+            <!-- ========================================== -->
+            <section id="deletion-tab" class="hidden space-y-4">
+                <div
+                    class="bg-gradient-to-r from-rose-50 to-pink-50/50 border border-rose-200 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base font-black text-rose-950 flex items-center gap-2">
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-rose-600"></i>
+                            Master Catalog Governance &amp; Deletion Console
+                        </h2>
+                        <p class="text-xs text-rose-700 font-medium">Administrator Superuser Only: Features both FK
+                            Referential Integrity Interception and Force Cascade Clean Purge.</p>
+                    </div>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-rose-600 text-white shadow-xs">
+                        Superuser: Y. Abhinav Sri Ram
+                    </span>
+                </div>
+
+                <div class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs max-w-xl space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Target Medicine to Delete</label>
+                        <select id="delete-med-select"
+                            class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl bg-white"></select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="executeStandardDelete()"
+                            class="py-3 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl border border-slate-300 transition-all flex flex-col items-center justify-center gap-1">
+                            <span class="flex items-center gap-1"><i data-lucide="shield"
+                                    class="w-3.5 h-3.5 text-blue-600"></i> Standard Delete</span>
+                            <span class="text-[10px] font-normal text-slate-500">(Integrity-Check Mode)</span>
+                        </button>
+
+                        <button onclick="promptCascadeDeleteModal()"
+                            class="py-3 px-3 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex flex-col items-center justify-center gap-1">
+                            <span class="flex items-center gap-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                Force Cascade Purge</span>
+                            <span class="text-[10px] font-normal text-rose-200">(Admin Override)</span>
+                        </button>
+                    </div>
+
+                    <!-- Safe-Delete Demo Tool -->
+                    <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-700">Safe-Delete Demonstration Tool</span>
+                            <span
+                                class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-bold">Evaluator
+                                Tool</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-normal">Generate an isolated trial drug (no child
+                            batches) to demonstrate clean unhindered deletion in contrast to foreign-key protected
+                            drugs.</p>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button onclick="createDemoDrug()"
+                                class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-lg flex items-center gap-1">
+                                <i data-lucide="plus" class="w-3 h-3"></i> 1. Create Isolated Trial Drug
+                            </button>
+                            <span id="demo-drug-status" class="text-xs text-slate-600 font-mono"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INLINE INTEGRITY CONSTRAINT ALERT MODAL -->
+                <div id="fk-blocked-modal"
+                    class="hidden max-w-xl bg-amber-50 border-2 border-amber-400 rounded-2xl p-5 shadow-lg space-y-3">
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="h-9 w-9 bg-amber-500 text-white rounded-xl flex items-center justify-center shrink-0">
+                            <i data-lucide="alert-octagon" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-amber-900">Action Intercepted: Referential Integrity
+                                Constraint Active</h3>
+                            <p class="text-xs text-amber-800 mt-1 leading-relaxed" id="fk-blocked-text">
+                                This drug has existing stock batches or completed sales records in MySQL. MySQL rejected
+                                deletion with <strong>Error 1451</strong>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="pt-2 border-t border-amber-200 flex items-center justify-end gap-2">
+                        <button onclick="document.getElementById('fk-blocked-modal').classList.add('hidden')"
+                            class="px-3 py-1.5 text-xs font-semibold bg-white border border-amber-300 text-amber-900 rounded-lg hover:bg-amber-100">
+                            Dismiss
+                        </button>
+                        <button onclick="promptCascadeDeleteModalFromAlert()"
+                            class="px-3 py-1.5 text-xs font-bold bg-rose-600 text-white rounded-lg hover:bg-rose-700 flex items-center gap-1">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Force Cascade Clean Deletion Instead
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ========================================== -->
+            <!-- STOCK MOVEMENTS AUDIT LOG -->
+            <!-- ========================================== -->
+            <section id="movements-tab" class="hidden space-y-4">
+                <div
+                    class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs">
+                    <div>
+                        <h2 class="text-base font-black text-slate-900">Stock Movements Audit Trail</h2>
+                        <p class="text-xs text-slate-500">Direct log from MySQL <code>Stock_Movements</code> table
+                            tracking intake, adjustments, and POS dispenses.</p>
+                    </div>
+                    <button onclick="fetchStockMovements()"
+                        class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors">
+                        Refresh Log
+                    </button>
+                </div>
+
+                <div class="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs">
+                    <div class="overflow-x-auto max-h-[500px]">
+                        <table class="w-full text-left text-xs">
+                            <thead
+                                class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200/80 sticky top-0">
+                                <tr>
+                                    <th class="py-3 px-4">Movement ID</th>
+                                    <th class="py-3 px-4">Medicine</th>
+                                    <th class="py-3 px-4">Batch #</th>
+                                    <th class="py-3 px-4">Movement Type</th>
+                                    <th class="py-3 px-4 text-right">Delta</th>
+                                    <th class="py-3 px-4">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="movements-tbody" class="divide-y divide-slate-100 text-slate-700">
+                                <tr>
+                                    <td colspan="6" class="py-8 text-center text-slate-400">Loading stock movements...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- DEDICATED MODAL: MY PROFILE & OPERATIONAL ROLES -->
+    <!-- ========================================== -->
+    <div id="modal-profile"
+        class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto animate-in fade-in duration-150">
+        <div
+            class="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-6 sm:p-7 space-y-6 shadow-2xl my-auto relative">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div class="flex items-center gap-3.5">
+                    <div id="prof-hero-avatar"
+                        class="h-14 w-14 bg-gradient-to-tr from-purple-700 to-indigo-600 text-white rounded-2xl flex items-center justify-center font-black text-lg shadow-md shadow-purple-500/20">
+                        YA
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 id="prof-hero-name" class="text-base sm:text-lg font-black text-slate-900">Y. Abhinav
+                                Sri Ram</h2>
+                            <span id="prof-hero-status"
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active
+                            </span>
+                        </div>
+                        <p id="prof-hero-role" class="text-xs font-bold text-purple-700 mt-0.5">Administrator —
+                            Superuser Full Governance</p>
+                    </div>
+                </div>
+                <button onclick="closeProfileModal()"
+                    class="text-slate-400 hover:text-slate-700 p-1.5 rounded-xl hover:bg-slate-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Profile Details Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl space-y-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Staff ID /
+                        License</span>
+                    <p id="prof-staff-id" class="font-mono font-bold text-slate-800 text-sm">ADM-001</p>
+                </div>
+                <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl space-y-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Work Email</span>
+                    <p id="prof-email" class="font-bold text-slate-800 truncate">abhinav@pharmacare.rx</p>
+                </div>
+                <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl space-y-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Contact Phone</span>
+                    <p id="prof-phone" class="font-mono font-bold text-slate-800">+91 98450 11223</p>
+                </div>
+                <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl space-y-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Connected
+                        Database</span>
+                    <p class="font-mono font-bold text-emerald-700">pharmacydb (MySQL 9.7)</p>
+                </div>
+            </div>
+
+            <!-- Operational Permissions Matrix -->
+            <div class="space-y-2">
+                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-teal-600"></i>
+                    Role Operational Permissions Matrix
+                </h4>
+                <div id="prof-permissions-list"
+                    class="bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 space-y-2 text-xs"></div>
+            </div>
+
+            <!-- Edit Personal Info Form -->
+            <form onsubmit="updateProfileDetails(event)" class="pt-2 border-t border-slate-100 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800">Quick Edit Profile Info</span>
+                    <span class="text-[10px] text-slate-400">Updates MySQL `users` record</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Display Name</label>
+                        <input type="text" id="edit-prof-name"
+                            class="w-full text-xs px-3 py-1.5 border border-slate-300 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Phone Number</label>
+                        <input type="text" id="edit-prof-phone"
+                            class="w-full text-xs px-3 py-1.5 border border-slate-300 rounded-xl font-mono">
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-1">
+                    <button type="button" onclick="openAuthModal()"
+                        class="text-xs font-bold text-rose-600 hover:text-rose-800 flex items-center gap-1">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Sign Out / Switch User
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1">
+                        <i data-lucide="save" class="w-3.5 h-3.5"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: CASCADE CLEAN DELETION CONFIRMATION -->
+    <!-- ========================================== -->
+    <div id="modal-cascade-confirm"
+        class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div
+            class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl animate-in fade-in duration-150">
+            <div class="flex items-center gap-3 text-rose-600">
+                <div class="h-10 w-10 bg-rose-100 rounded-xl flex items-center justify-center font-bold">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">Confirm Force Cascade Clean Deletion</h3>
+                    <p class="text-xs text-rose-600 font-semibold">Administrator Superuser Override</p>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed">
+                You are about to permanently purge <strong id="cascade-med-name" class="text-slate-900"></strong> from
+                MySQL.
+                Because other records reference this drug, this will execute an atomic multi-table purge in referential
+                order:
+            </p>
+
+            <div
+                class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs space-y-1.5 text-slate-700 font-mono">
+                <div class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> 1. Purge
+                    child entries in <code>Stock_Movements</code></div>
+                <div class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> 2. Purge
+                    child items in <code>Sale_Items</code></div>
+                <div class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> 3. Purge
+                    child lots in <code>Batches</code></div>
+                <div class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> 4. Purge
+                    parent row in <code>Medicines</code></div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                <button onclick="closeCascadeModal()"
+                    class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">
+                    Cancel
+                </button>
+                <button onclick="commitCascadeDelete()"
+                    class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> Execute Cascade Purge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: QUICK NEW PATIENT -->
+    <!-- ========================================== -->
+    <div id="modal-new-customer"
+        class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+            <h3 class="text-sm font-bold text-slate-900">Register New Patient</h3>
+            <form onsubmit="submitNewCustomer(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Patient Full Name</label>
+                    <input type="text" id="modal-cust-name" required placeholder="e.g. Ramesh Kumar"
+                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Phone Number</label>
+                    <input type="text" id="modal-cust-phone" placeholder="e.g. 9845012345"
+                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl font-mono">
+                </div>
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeNewCustomerModal()"
+                        class="px-3 py-1.5 text-xs text-slate-600">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl">Save
+                        Patient</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: QUICK NEW PRESCRIPTION -->
+    <!-- ========================================== -->
+    <div id="modal-new-prescription"
+        class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+            <h3 class="text-sm font-bold text-slate-900">Link Doctor Prescription</h3>
+            <form onsubmit="submitNewPrescription(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Doctor Name</label>
+                    <input type="text" id="modal-rx-doctor" required placeholder="e.g. Dr. K. Venkat, MD"
+                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Issue Date</label>
+                    <input type="date" id="modal-rx-date" required
+                        class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-xl">
+                </div>
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeNewPrescriptionModal()"
+                        class="px-3 py-1.5 text-xs text-slate-600">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl">Save
+                        &amp; Link Rx</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: CLINICAL RECEIPT / INVOICE MODAL -->
+    <!-- ========================================== -->
+    <div id="modal-receipt"
+        class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="text-center pb-3 border-b border-slate-100">
+                <span class="inline-block p-2.5 bg-emerald-50 text-emerald-600 rounded-full mb-2">
+                    <i data-lucide="check" class="w-6 h-6"></i>
+                </span>
+                <h3 class="text-base font-black text-slate-900">Dispensing Bill Completed</h3>
+                <p class="text-xs text-slate-500 font-mono" id="receipt-sale-number">Invoice #101</p>
+            </div>
+
+            <div class="space-y-2 text-xs">
+                <div class="flex justify-between py-1 border-b border-slate-100">
+                    <span class="text-slate-500">Patient:</span>
+                    <span class="font-bold text-slate-800" id="receipt-customer">--</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-100">
+                    <span class="text-slate-500">Doctor Rx:</span>
+                    <span class="font-semibold text-slate-800" id="receipt-rx">None (OTC)</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-100">
+                    <span class="text-slate-500">Payment:</span>
+                    <span class="font-semibold text-slate-800" id="receipt-payment">Cash</span>
+                </div>
+                <div class="flex justify-between py-2 border-t border-slate-200 text-sm">
+                    <span class="font-bold text-slate-900">Total Paid:</span>
+                    <span class="font-black text-teal-700 font-mono text-base" id="receipt-total">₹0.00</span>
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <button onclick="closeReceiptModal()"
+                    class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-colors">
+                    Close &amp; Ready for Next Customer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT STATE ENGINE -->
+    <script>
+        // --- GLOBAL STATE ---
+        let currentRole = 'Admin';
+        let currentUser = {
+            UserID: 1,
+            FullName: "Y. Abhinav Sri Ram",
+            Email: "abhinav@pharmacare.rx",
+            Role: "Administrator",
+            StaffID: "ADM-001",
+            Phone: "+91 98450 11223"
+        };
+        let rawInventory = [];
+        let metadata = {
+            categories: [],
+            manufacturers: [],
+            suppliers: [],
+            customers: [],
+            prescriptions: [],
+            medicines: []
+        };
+        let posCart = [];
+        let targetCascadeMedicineId = null;
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            lucide.createIcons();
+            document.getElementById('modal-rx-date').value = new Date().toISOString().split('T')[0];
+
+            const savedUser = localStorage.getItem('pharmacare_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                } catch (e) { }
+            }
+
+            await loadMetadata();
+            await fetchInventory();
+            await fetchNearExpiry();
+
+            if (currentUser.Role.includes('Admin')) {
+                setRole('Admin', false);
+            } else if (currentUser.Role.includes('Pharm')) {
+                setRole('Pharmacist', false);
+            } else {
+                setRole('Inventory', false);
+            }
+        });
+
+        // --- AUTHENTICATION MODAL & TABS ---
+        function openAuthModal() {
+            document.getElementById('auth-screen').classList.remove('hidden');
+            setAuthTab('quick');
+            lucide.createIcons();
+        }
+        function closeAuthModal() {
+            document.getElementById('auth-screen').classList.add('hidden');
+        }
+
+        function setAuthTab(tab) {
+            ['quick', 'login', 'signup'].forEach(t => {
+                document.getElementById(`auth-panel-${t}`).classList.add('hidden');
+                document.getElementById(`auth-tab-${t}`).className = "py-2.5 rounded-xl text-slate-600 hover:text-slate-900 transition-all flex items-center justify-center gap-1.5";
+            });
+            document.getElementById(`auth-panel-${tab}`).classList.remove('hidden');
+            document.getElementById(`auth-tab-${tab}`).className = "py-2.5 rounded-xl bg-white text-slate-900 shadow-sm transition-all flex items-center justify-center gap-1.5 font-bold";
+            lucide.createIcons();
+        }
+
+        async function loginWithPersona(personaRole) {
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ persona_role: personaRole })
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    currentUser = json.user;
+                    localStorage.setItem('pharmacare_user', JSON.stringify(currentUser));
+                    closeAuthModal();
+
+                    if (personaRole === 'Administrator') setRole('Admin');
+                    else if (personaRole === 'Pharmacist') setRole('Pharmacist');
+                    else setRole('Inventory');
+
+                    showToast(`✅ Authenticated as <strong>${currentUser.FullName}</strong> (${currentUser.Role})`, "success");
+                }
+            } catch (err) {
+                showToast("Login error: " + err.message, "error");
+            }
+        }
+
+        async function submitStandardLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    currentUser = json.user;
+                    localStorage.setItem('pharmacare_user', JSON.stringify(currentUser));
+                    closeAuthModal();
+
+                    if (currentUser.Role.includes('Admin')) setRole('Admin');
+                    else if (currentUser.Role.includes('Pharm')) setRole('Pharmacist');
+                    else setRole('Inventory');
+
+                    showToast(`✅ Logged in successfully as <strong>${currentUser.FullName}</strong>!`, "success");
+                } else {
+                    showToast(`❌ ${json.message}`, "error");
+                }
+            } catch (err) {
+                showToast("Login request error: " + err.message, "error");
+            }
+        }
+
+        async function submitStaffSignup(e) {
+            e.preventDefault();
+            const payload = {
+                full_name: document.getElementById('signup-name').value,
+                role: document.getElementById('signup-role').value,
+                email: document.getElementById('signup-email').value,
+                password: document.getElementById('signup-password').value,
+                staff_id: document.getElementById('signup-staff-id').value,
+                phone: document.getElementById('signup-phone').value
+            };
+
+            try {
+                const res = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    currentUser = json.user;
+                    localStorage.setItem('pharmacare_user', JSON.stringify(currentUser));
+                    closeAuthModal();
+
+                    if (currentUser.Role.includes('Admin')) setRole('Admin');
+                    else if (currentUser.Role.includes('Pharm')) setRole('Pharmacist');
+                    else setRole('Inventory');
+
+                    showToast(`🎉 <strong>Account Created:</strong> Welcome, ${currentUser.FullName}!`, "success");
+                } else {
+                    showToast(`❌ ${json.message}`, "error");
+                }
+            } catch (err) {
+                showToast("Registration error: " + err.message, "error");
+            }
+        }
+
+        // --- MY PROFILE MODAL ---
+        function openProfileModal() {
+            const modal = document.getElementById('modal-profile');
+            document.getElementById('prof-hero-name').innerText = currentUser.FullName;
+            document.getElementById('prof-hero-role').innerText = `${currentUser.Role} — Operational Core`;
+            document.getElementById('prof-staff-id').innerText = currentUser.StaffID || 'STAFF-ACTIVE';
+            document.getElementById('prof-email').innerText = currentUser.Email;
+            document.getElementById('prof-phone').innerText = currentUser.Phone || '+91 Not Set';
+
+            const initials = currentUser.FullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('prof-hero-avatar').innerText = initials;
+
+            document.getElementById('edit-prof-name').value = currentUser.FullName;
+            document.getElementById('edit-prof-phone').value = currentUser.Phone || '';
+
+            renderPermissionsMatrix(currentUser.Role);
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeProfileModal() {
+            document.getElementById('modal-profile').classList.add('hidden');
+        }
+
+        function renderPermissionsMatrix(role) {
+            const container = document.getElementById('prof-permissions-list');
+            const isAdmin = role.includes('Admin');
+            const isPharm = role.includes('Pharm');
+            const isInv = role.includes('Inventory');
+
+            container.innerHTML = `
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-200/60">
+                    <span class="text-slate-700">POS Dispense &amp; Live Patient Billing</span>
+                    ${(isAdmin || isPharm)
+                    ? '<span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Allowed</span>'
+                    : '<span class="font-semibold text-rose-600 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Restricted</span>'}
+                </div>
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-200/60">
+                    <span class="text-slate-700">Schedule H Prescription Verification</span>
+                    ${(isAdmin || isPharm)
+                    ? '<span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Authorized</span>'
+                    : '<span class="font-semibold text-rose-600 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Restricted</span>'}
+                </div>
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-200/60">
+                    <span class="text-slate-700">Inward Stock Lots &amp; Consignment Intake</span>
+                    ${(isAdmin || isInv)
+                    ? '<span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Allowed</span>'
+                    : '<span class="font-semibold text-rose-600 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Restricted</span>'}
+                </div>
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-200/60">
+                    <span class="text-slate-700">Batch Stock &amp; Cost Price Revision</span>
+                    ${(isAdmin || isInv)
+                    ? '<span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Allowed</span>'
+                    : '<span class="font-semibold text-rose-600 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Restricted</span>'}
+                </div>
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-200/60">
+                    <span class="text-slate-700">Master Catalog Deletion (Integrity Check)</span>
+                    ${isAdmin
+                    ? '<span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Allowed</span>'
+                    : '<span class="font-semibold text-rose-600 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Superuser Only</span>'}
+                </div>
+                <div class="flex items-center justify-between py-1.5">
+                    <span class="text-slate-700">Force Cascade Clean Purge (Atomic Deletion)</span>
+                    ${isAdmin
+                    ? '<span class="font-bold text-emerald-700 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Allowed (Override)</span>'
+                    : '<span class="font-semibold text-rose-600 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Superuser Only</span>'}
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        async function updateProfileDetails(e) {
+            e.preventDefault();
+            const newName = document.getElementById('edit-prof-name').value;
+            const newPhone = document.getElementById('edit-prof-phone').value;
+
+            try {
+                const res = await fetch('/api/auth/profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: currentUser.UserID, full_name: newName, phone: newPhone })
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    currentUser.FullName = newName;
+                    currentUser.Phone = newPhone;
+                    localStorage.setItem('pharmacare_user', JSON.stringify(currentUser));
+                    document.getElementById('user-display-name').innerText = newName;
+                    showToast("Profile details updated in MySQL!", "success");
+                    closeProfileModal();
+                } else {
+                    showToast(json.message, "error");
+                }
+            } catch (err) {
+                showToast("Update error: " + err.message, "error");
+            }
+        }
+
+        // --- ROLE MANAGEMENT & WORKSPACE SEGREGATION ---
+        function setRole(role, notify = true) {
+            currentRole = role;
+
+            ['btn-admin', 'btn-pharmacist', 'btn-inv'].forEach(id => {
+                document.getElementById(id).className = "px-2.5 sm:px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-medium flex items-center gap-1.5 transition-all text-[11px] sm:text-xs";
+            });
+
+            const userDisplayName = document.getElementById('user-display-name');
+            const roleLabel = document.getElementById('role-label');
+            const userAvatar = document.getElementById('user-avatar');
+            const posOperatorName = document.getElementById('pos-operator-name');
+            const workspaceNotice = document.getElementById('current-workspace-name');
+
+            if (role === 'Admin') {
+                document.getElementById('btn-admin').className = "px-2.5 sm:px-3 py-1.5 rounded-xl bg-white text-slate-900 shadow-xs font-bold flex items-center gap-1.5 transition-all text-[11px] sm:text-xs";
+                currentUser = {
+                    UserID: 1,
+                    FullName: "Y. Abhinav Sri Ram",
+                    Email: "abhinav@pharmacare.rx",
+                    Role: "Administrator",
+                    StaffID: "ADM-001",
+                    Phone: "+91 98450 11223"
+                };
+                userDisplayName.innerText = currentUser.FullName;
+                roleLabel.innerText = "Administrator";
+                roleLabel.className = "inline-block text-[10px] font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-1.5 py-0.2 rounded-md mt-0.5";
+                userAvatar.innerText = "YA";
+                userAvatar.className = "h-9 w-9 bg-purple-100 text-purple-700 rounded-xl flex items-center justify-center font-black text-xs ring-2 ring-purple-200 shrink-0";
+                posOperatorName.innerText = "Y. Abhinav Sri Ram (Admin)";
+                workspaceNotice.innerText = "Superuser Full Governance";
+            } else if (role === 'Pharmacist') {
+                document.getElementById('btn-pharmacist').className = "px-2.5 sm:px-3 py-1.5 rounded-xl bg-white text-slate-900 shadow-xs font-bold flex items-center gap-1.5 transition-all text-[11px] sm:text-xs";
+                currentUser = {
+                    UserID: 2,
+                    FullName: "P. Rajesh",
+                    Email: "rajesh@pharmacare.rx",
+                    Role: "Pharmacist",
+                    StaffID: "PHARM-104",
+                    Phone: "+91 97412 33445"
+                };
+                userDisplayName.innerText = currentUser.FullName;
+                roleLabel.innerText = "Pharmacist";
+                roleLabel.className = "inline-block text-[10px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-1.5 py-0.2 rounded-md mt-0.5";
+                userAvatar.innerText = "PR";
+                userAvatar.className = "h-9 w-9 bg-teal-100 text-teal-700 rounded-xl flex items-center justify-center font-black text-xs ring-2 ring-teal-200 shrink-0";
+                posOperatorName.innerText = "P. Rajesh (Dispensing Terminal)";
+                workspaceNotice.innerText = "POS & Dispensing Terminal";
+            } else { // Inventory Manager
+                document.getElementById('btn-inv').className = "px-2.5 sm:px-3 py-1.5 rounded-xl bg-white text-slate-900 shadow-xs font-bold flex items-center gap-1.5 transition-all text-[11px] sm:text-xs";
+                currentUser = {
+                    UserID: 3,
+                    FullName: "S. Kulkarni",
+                    Email: "kulkarni@pharmacare.rx",
+                    Role: "Inventory Manager",
+                    StaffID: "INV-209",
+                    Phone: "+91 94481 55667"
+                };
+                userDisplayName.innerText = currentUser.FullName;
+                roleLabel.innerText = "Inventory Manager";
+                roleLabel.className = "inline-block text-[10px] font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-1.5 py-0.2 rounded-md mt-0.5";
+                userAvatar.innerText = "SK";
+                userAvatar.className = "h-9 w-9 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center font-black text-xs ring-2 ring-blue-200 shrink-0";
+                posOperatorName.innerText = "S. Kulkarni (Restricted)";
+                workspaceNotice.innerText = "Inward Stock & Expiry Watchlist";
+            }
+
+            localStorage.setItem('pharmacare_user', JSON.stringify(currentUser));
+            applyRolePermissions(role);
+            if (notify) {
+                showToast(`Switched operational persona to: <strong>${userDisplayName.innerText}</strong> (${roleLabel.innerText})`, "info");
+            }
+        }
+
+        function applyRolePermissions(role) {
+            const intakeLock = document.getElementById('intake-lock-badge');
+            const updaterLock = document.getElementById('updater-lock-badge');
+            const deletionLock = document.getElementById('deletion-lock-badge');
+            const posBadge = document.getElementById('pos-perm-badge');
+
+            if (role === 'Pharmacist') {
+                intakeLock.classList.remove('hidden');
+                updaterLock.classList.remove('hidden');
+                deletionLock.classList.remove('hidden');
+                posBadge.innerText = "ACTIVE";
+                posBadge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200";
+                switchTab('pos-tab');
+            } else if (role === 'Inventory') {
+                intakeLock.classList.add('hidden');
+                updaterLock.classList.add('hidden');
+                deletionLock.classList.remove('hidden');
+                posBadge.innerText = "LOCKED";
+                posBadge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-400 border border-slate-200";
+                switchTab('intake-tab');
+            } else {
+                intakeLock.classList.add('hidden');
+                updaterLock.classList.add('hidden');
+                deletionLock.classList.add('hidden');
+                posBadge.innerText = "ACTIVE";
+                posBadge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200";
+                switchTab('inventory-tab');
+            }
+        }
+
+        function switchTab(tabId) {
+            if (currentRole === 'Pharmacist') {
+                if (tabId === 'intake-tab' || tabId === 'updater-tab' || tabId === 'deletion-tab') {
+                    showToast("⛔ <strong>Access Restricted:</strong> Pharmacists are restricted from Inward Consignment, Batch Revision, and Catalog Deletion.", "error");
+                    return;
+                }
+            } else if (currentRole === 'Inventory') {
+                if (tabId === 'deletion-tab') {
+                    showToast("⛔ <strong>Access Restricted:</strong> Catalog Deletion is restricted strictly to Administrator (Y. Abhinav Sri Ram).", "error");
+                    return;
+                }
+                if (tabId === 'pos-tab') {
+                    showToast("⛔ <strong>Access Restricted:</strong> Inventory Managers are restricted from POS billing and dispensing.", "error");
+                    return;
+                }
+            }
+
+            const tabs = ['inventory-tab', 'pos-tab', 'expiry-tab', 'intake-tab', 'updater-tab', 'deletion-tab', 'movements-tab'];
+            tabs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            const targetEl = document.getElementById(tabId);
+            if (targetEl) targetEl.classList.remove('hidden');
+
+            const navs = ['nav-inventory', 'nav-pos', 'nav-expiry', 'nav-intake', 'nav-updater', 'nav-deletion', 'nav-movements'];
+            navs.forEach(n => {
+                const btn = document.getElementById(n);
+                if (btn) btn.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-100 transition-all";
+            });
+
+            const navMap = {
+                'inventory-tab': 'nav-inventory',
+                'pos-tab': 'nav-pos',
+                'expiry-tab': 'nav-expiry',
+                'intake-tab': 'nav-intake',
+                'updater-tab': 'nav-updater',
+                'deletion-tab': 'nav-deletion',
+                'movements-tab': 'nav-movements'
+            };
+            const activeNav = document.getElementById(navMap[tabId]);
+            if (activeNav) {
+                activeNav.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-100/80 shadow-xs transition-all";
+            }
+
+            if (tabId === 'inventory-tab') fetchInventory();
+            if (tabId === 'expiry-tab') fetchNearExpiry();
+            if (tabId === 'movements-tab') fetchStockMovements();
+            if (tabId === 'pos-tab') renderPosCatalog();
+        }
+
+        // --- TOAST NOTIFICATIONS ---
+        function showToast(htmlMsg, type = "success") {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            toast.className = "fixed bottom-5 right-5 z-50 p-4 rounded-2xl border text-xs font-semibold shadow-xl transition-all flex items-center justify-between max-w-md animate-in slide-in-from-bottom-2";
+
+            if (type === "success") {
+                toast.classList.add('bg-emerald-50', 'text-emerald-950', 'border-emerald-300');
+            } else if (type === "error" || type === "blocked") {
+                toast.classList.add('bg-rose-50', 'text-rose-950', 'border-rose-300');
+            } else {
+                toast.classList.add('bg-sky-50', 'text-sky-950', 'border-sky-300');
+            }
+            msgEl.innerHTML = htmlMsg;
+            toast.classList.remove('hidden');
+            setTimeout(() => { toast.classList.add('hidden'); }, 7000);
+        }
+
+        // --- METADATA FETCHING ---
+        async function loadMetadata() {
+            try {
+                const res = await fetch('/api/metadata');
+                const json = await res.json();
+                if (json.status !== 'success') return;
+                metadata = json;
+
+                const catFilter = document.getElementById('inventory-cat-filter');
+                const intakeCat = document.getElementById('intake-category');
+                catFilter.innerHTML = '<option value="">All Categories</option>';
+                intakeCat.innerHTML = '';
+                metadata.categories.forEach(c => {
+                    catFilter.innerHTML += `<option value="${c.CategoryName}">${c.CategoryName}</option>`;
+                    intakeCat.innerHTML += `<option value="${c.CategoryID}">${c.CategoryName}</option>`;
+                });
+
+                const intakeMfg = document.getElementById('intake-manufacturer');
+                intakeMfg.innerHTML = '';
+                metadata.manufacturers.forEach(m => {
+                    intakeMfg.innerHTML += `<option value="${m.ManufacturerID}">${m.ManufacturerName}</option>`;
+                });
+
+                const intakeSup = document.getElementById('intake-supplier');
+                intakeSup.innerHTML = '';
+                metadata.suppliers.forEach(s => {
+                    intakeSup.innerHTML += `<option value="${s.SupplierID}">${s.SupplierName}</option>`;
+                });
+
+                const posCust = document.getElementById('pos-customer-select');
+                posCust.innerHTML = '<option value="">-- Choose Patient / Customer --</option>';
+                metadata.customers.forEach(c => {
+                    posCust.innerHTML += `<option value="${c.CustomerID}">${c.CustomerName} (${c.Phone || 'No Phone'})</option>`;
+                });
+
+                populateMedicineDropdowns();
+            } catch (e) {
+                console.error("Metadata load error", e);
+            }
+        }
+
+        function populateMedicineDropdowns() {
+            const delSelect = document.getElementById('delete-med-select');
+            const intakeExisting = document.getElementById('intake-existing-med');
+
+            delSelect.innerHTML = '<option value="">-- Select Medicine from Catalog --</option>';
+            intakeExisting.innerHTML = '<option value="">-- Choose Catalog Medicine --</option>';
+
+            metadata.medicines.forEach(m => {
+                const batchBadge = m.BatchCount !== undefined ? ` [${m.BatchCount} active batches]` : '';
+                delSelect.innerHTML += `<option value="${m.MedicineID}">${m.MedicineName}${batchBadge}</option>`;
+                intakeExisting.innerHTML += `<option value="${m.MedicineID}">${m.MedicineName}</option>`;
+            });
+        }
+
+        // --- MODULE A: LIVE INVENTORY ---
+        async function fetchInventory() {
+            try {
+                const res = await fetch('/api/inventory');
+                const json = await res.json();
+                if (json.status !== 'success') throw new Error(json.message);
+
+                rawInventory = json.data;
+                document.getElementById('badge-nav-batches').innerText = rawInventory.length;
+                renderInventoryTable(rawInventory);
+                renderPosCatalog();
+                populateUpdateBatchDropdown(rawInventory);
+
+                let totalUnits = 0;
+                let expiringCount = 0;
+                let restrictedCount = 0;
+
+                rawInventory.forEach(r => {
+                    totalUnits += r.StockQuantity;
+                    if (r.DaysToExpiry <= 30) expiringCount++;
+                    if (r.IsRestricted) restrictedCount++;
+                });
+
+                document.getElementById('stat-total-batches').innerText = rawInventory.length;
+                document.getElementById('stat-total-units').innerText = totalUnits.toLocaleString();
+                document.getElementById('stat-expiring').innerText = expiringCount;
+                document.getElementById('badge-nav-expiry').innerText = expiringCount;
+                document.getElementById('stat-restricted').innerText = restrictedCount;
+
+                lucide.createIcons();
+            } catch (err) {
+                showToast("Error connecting to MySQL: " + err.message, "error");
+            }
+        }
+
+        function renderInventoryTable(rows) {
+            const tbody = document.getElementById('inventory-tbody');
+            tbody.innerHTML = '';
+
+            if (rows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-400">No inventory batches match your query.</td></tr>`;
+                return;
+            }
+
+            rows.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/80 transition-colors";
+
+                const isLowStock = r.StockQuantity <= 20;
+                const isNearExpiry = r.DaysToExpiry <= 30;
+                const isExpired = r.DaysToExpiry < 0;
+
+                let expiryBadge = `<span class="font-medium text-slate-700">${r.ExpiryDate} (${r.DaysToExpiry}d)</span>`;
+                if (isExpired) {
+                    expiryBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300">EXPIRED (${Math.abs(r.DaysToExpiry)}d)</span>`;
+                } else if (isNearExpiry) {
+                    expiryBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse">${r.ExpiryDate} (${r.DaysToExpiry}d left)</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-mono font-bold text-slate-900">${r.BatchNumber}</td>
+                    <td class="py-3 px-4 font-bold text-slate-800">${r.MedicineName}</td>
+                    <td class="py-3 px-4 text-slate-500">${r.CategoryName}</td>
+                    <td class="py-3 px-4 text-slate-500">${r.ManufacturerName}</td>
+                    <td class="py-3 px-4">
+                        ${r.IsRestricted
+                        ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Schedule H</span>'
+                        : '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">OTC</span>'}
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                        <span class="font-bold text-slate-900">${r.StockQuantity}</span>
+                        ${isLowStock ? '<span class="ml-1 text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded-md">Low</span>' : ''}
+                    </td>
+                    <td class="py-3 px-4 text-right font-mono text-slate-700 font-semibold">₹${Number(r.UnitCost).toFixed(2)}</td>
+                    <td class="py-3 px-4">${expiryBadge}</td>
+                    <td class="py-3 px-4 text-center">
+                        <div class="flex items-center justify-center gap-1.5">
+                            <button onclick="quickAddBatchToPos(${r.BatchID})" title="Dispense in POS" class="p-1.5 rounded-lg bg-teal-50 text-teal-700 hover:bg-teal-100 transition-colors">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onclick="quickEditBatch(${r.BatchID}, ${r.StockQuantity}, ${r.UnitCost})" title="Edit Stock / Price" class="p-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+                                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        function filterInventoryTable() {
+            const query = (document.getElementById('inventory-search').value || '').toLowerCase();
+            const cat = document.getElementById('inventory-cat-filter').value;
+
+            const filtered = rawInventory.filter(r => {
+                const matchesQuery = r.MedicineName.toLowerCase().includes(query) ||
+                    r.BatchNumber.toLowerCase().includes(query) ||
+                    r.ManufacturerName.toLowerCase().includes(query);
+                const matchesCat = !cat || r.CategoryName === cat;
+                return matchesQuery && matchesCat;
+            });
+            renderInventoryTable(filtered);
+        }
+
+        // --- MODULE B: POS & DISPENSE TERMINAL ---
+        function renderPosCatalog() {
+            const container = document.getElementById('pos-catalog-list');
+            if (!container) return;
+            const query = (document.getElementById('pos-catalog-search')?.value || '').toLowerCase();
+
+            container.innerHTML = '';
+            const filtered = rawInventory.filter(b =>
+                b.MedicineName.toLowerCase().includes(query) ||
+                b.BatchNumber.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-6 text-center">No medicines found.</p>`;
+                return;
+            }
+
+            filtered.forEach(b => {
+                const card = document.createElement('div');
+                card.className = "p-3.5 border border-slate-200/90 hover:border-teal-400 rounded-2xl flex items-center justify-between gap-3 bg-white transition-all shadow-2xs hover:shadow-xs";
+
+                const retailPrice = (b.UnitCost * 1.5).toFixed(2);
+                const isOutOfStock = b.StockQuantity <= 0;
+
+                card.innerHTML = `
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-slate-900">${b.MedicineName}</span>
+                            ${b.IsRestricted
+                        ? '<span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200">Rx Schedule H</span>'
+                        : '<span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">OTC</span>'}
+                        </div>
+                        <div class="text-[11px] text-slate-500 flex items-center gap-3 mt-1">
+                            <span class="font-mono text-slate-600">Batch: <strong>${b.BatchNumber}</strong></span>
+                            <span>Stock: <strong class="${b.StockQuantity <= 10 ? 'text-amber-600 font-bold' : 'text-slate-800 font-bold'}">${b.StockQuantity}</strong> units</span>
+                            <span class="font-mono font-bold text-teal-700">₹${retailPrice}</span>
+                        </div>
+                    </div>
+                    <button onclick="quickAddBatchToPos(${b.BatchID})" ${isOutOfStock ? 'disabled' : ''}
+                        class="px-3 py-1.5 rounded-xl text-xs font-bold ${isOutOfStock ? 'bg-slate-100 text-slate-400' : 'bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white shadow-xs'} flex items-center gap-1 transition-all">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function filterPosCatalog() {
+            renderPosCatalog();
+        }
+
+        function quickAddBatchToPos(batchId) {
+            const batch = rawInventory.find(b => b.BatchID === batchId);
+            if (!batch) return;
+
+            if (batch.StockQuantity <= 0) {
+                showToast("Cannot add to cart: Batch is completely out of stock.", "error");
+                return;
+            }
+
+            const existing = posCart.find(i => i.batch_id === batchId);
+            if (existing) {
+                if (existing.quantity >= batch.StockQuantity) {
+                    showToast(`Cannot exceed physical stock of ${batch.StockQuantity} units.`, "error");
+                    return;
+                }
+                existing.quantity += 1;
+                existing.subtotal = Number((existing.quantity * existing.unit_price).toFixed(2));
+            } else {
+                const price = Number((batch.UnitCost * 1.5).toFixed(2));
+                posCart.push({
+                    batch_id: batchId,
+                    batch_number: batch.BatchNumber,
+                    medicine_name: batch.MedicineName,
+                    is_restricted: !!batch.IsRestricted,
+                    available_stock: batch.StockQuantity,
+                    quantity: 1,
+                    unit_price: price,
+                    subtotal: price
+                });
+            }
+
+            renderPosCart();
+            checkCompliance();
+            if (currentRole !== 'Inventory') {
+                switchTab('pos-tab');
+            }
+        }
+
+        function updateCartQty(batchId, delta) {
+            const item = posCart.find(i => i.batch_id === batchId);
+            if (!item) return;
+
+            const nextQty = item.quantity + delta;
+            if (nextQty <= 0) {
+                posCart = posCart.filter(i => i.batch_id !== batchId);
+            } else if (nextQty > item.available_stock) {
+                showToast(`Cannot exceed physical shelf count of ${item.available_stock} units.`, "error");
+                return;
+            } else {
+                item.quantity = nextQty;
+                item.subtotal = Number((item.quantity * item.unit_price).toFixed(2));
+            }
+
+            renderPosCart();
+            checkCompliance();
+        }
+
+        function removeCartItem(batchId) {
+            posCart = posCart.filter(i => i.batch_id !== batchId);
+            renderPosCart();
+            checkCompliance();
+        }
+
+        function renderPosCart() {
+            const tbody = document.getElementById('pos-cart-tbody');
+            const totalEl = document.getElementById('pos-grand-total');
+
+            if (posCart.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">Cart is empty. Select medicines from the catalog to bill.</td></tr>`;
+                totalEl.innerText = "₹0.00";
+                return;
+            }
+
+            tbody.innerHTML = '';
+            let grandTotal = 0;
+
+            posCart.forEach(item => {
+                grandTotal += item.subtotal;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3">
+                        <span class="font-bold text-slate-800 block">${item.medicine_name}</span>
+                        <span class="text-[10px] font-mono text-slate-500">${item.batch_number}</span>
+                        ${item.is_restricted ? '<span class="text-[9px] text-rose-600 font-extrabold uppercase ml-1">Rx</span>' : ''}
+                    </td>
+                    <td class="py-2.5 px-2 text-center">
+                        <div class="inline-flex items-center gap-1.5 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200">
+                            <button onclick="updateCartQty(${item.batch_id}, -1)" class="text-slate-600 hover:text-black font-bold text-xs">&minus;</button>
+                            <span class="font-bold text-xs font-mono">${item.quantity}</span>
+                            <button onclick="updateCartQty(${item.batch_id}, 1)" class="text-slate-600 hover:text-black font-bold text-xs">&plus;</button>
+                        </div>
+                    </td>
+                    <td class="py-2.5 px-2 text-right font-mono text-slate-600">₹${item.unit_price.toFixed(2)}</td>
+                    <td class="py-2.5 px-2 text-right font-mono font-bold text-slate-900">₹${item.subtotal.toFixed(2)}</td>
+                    <td class="py-2.5 px-2 text-center">
+                        <button onclick="removeCartItem(${item.batch_id})" class="text-slate-400 hover:text-rose-600">
+                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            totalEl.innerText = `₹${grandTotal.toFixed(2)}`;
+            lucide.createIcons();
+        }
+
+        function checkCompliance() {
+            const hasRestricted = posCart.some(i => i.is_restricted);
+            const prescriptionAlert = document.getElementById('pos-prescription-alert');
+            const rxRequiredIndicator = document.getElementById('pos-rx-required-indicator');
+            const prescriptionSelect = document.getElementById('pos-prescription-select');
+            const checkoutBtn = document.getElementById('pos-checkout-btn');
+
+            if (hasRestricted) {
+                rxRequiredIndicator.classList.remove('hidden');
+                prescriptionAlert.classList.remove('hidden');
+
+                const rxSelected = !!prescriptionSelect.value;
+                if (!rxSelected) {
+                    checkoutBtn.disabled = true;
+                    checkoutBtn.className = "w-full py-3 bg-slate-300 text-slate-500 font-bold text-xs rounded-xl shadow-xs cursor-not-allowed flex items-center justify-center gap-2";
+                    checkoutBtn.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i> Checkout Locked: Attach Doctor Prescription`;
+                } else {
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.className = "w-full py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-teal-500/20 transition-all flex items-center justify-center gap-2";
+                    checkoutBtn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> Complete Checkout &amp; Commit Sale`;
+                }
+            } else {
+                rxRequiredIndicator.classList.add('hidden');
+                prescriptionAlert.classList.add('hidden');
+                checkoutBtn.disabled = false;
+                checkoutBtn.className = "w-full py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md shadow-teal-500/20 transition-all flex items-center justify-center gap-2";
+                checkoutBtn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> Complete Checkout &amp; Commit Sale`;
+            }
+            lucide.createIcons();
+        }
+
+        function onCustomerChange() {
+            const custId = parseInt(document.getElementById('pos-customer-select').value);
+            const rxSelect = document.getElementById('pos-prescription-select');
+            rxSelect.innerHTML = '<option value="">-- No Prescription Linked (OTC Only) --</option>';
+
+            if (!custId) return;
+
+            const relevantRxs = metadata.prescriptions.filter(p => p.CustomerID === custId);
+            relevantRxs.forEach(p => {
+                rxSelect.innerHTML += `<option value="${p.PrescriptionID}">Rx #${p.PrescriptionID} - ${p.DoctorName} (${p.IssueDate})</option>`;
+            });
+
+            if (relevantRxs.length > 0) {
+                rxSelect.value = relevantRxs[0].PrescriptionID;
+            }
+            checkCompliance();
+        }
+
+        async function executePosCheckout() {
+            const customerId = document.getElementById('pos-customer-select').value;
+            if (!customerId) {
+                showToast("Please select a Patient / Customer to bill.", "error");
+                return;
+            }
+            if (posCart.length === 0) {
+                showToast("Cart is empty.", "error");
+                return;
+            }
+
+            const prescriptionId = document.getElementById('pos-prescription-select').value || null;
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'Cash';
+
+            const payload = {
+                customer_id: parseInt(customerId),
+                prescription_id: prescriptionId ? parseInt(prescriptionId) : null,
+                payment_method: paymentMethod,
+                items: posCart.map(i => ({
+                    batch_id: i.batch_id,
+                    quantity: i.quantity,
+                    unit_price: i.unit_price
+                }))
+            };
+
+            try {
+                const res = await fetch('/api/sales/checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-User-Role': currentRole
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+
+                if (json.status === 'success') {
+                    showToast(`✅ <strong>Sale Dispensed:</strong> ${json.message}`, "success");
+
+                    const custObj = metadata.customers.find(c => c.CustomerID === parseInt(customerId));
+                    document.getElementById('receipt-sale-number').innerText = `Transaction ID #${json.sale_id}`;
+                    document.getElementById('receipt-customer').innerText = custObj ? custObj.CustomerName : 'Walk-in';
+                    document.getElementById('receipt-rx').innerText = prescriptionId ? `Authorized (Prescription #${prescriptionId})` : 'None (OTC Substances Only)';
+                    document.getElementById('receipt-payment').innerText = paymentMethod;
+                    document.getElementById('receipt-total').innerText = `₹${json.grand_total.toFixed(2)}`;
+                    document.getElementById('modal-receipt').classList.remove('hidden');
+
+                    posCart = [];
+                    renderPosCart();
+                    checkCompliance();
+                    fetchInventory();
+                } else if (json.prescription_required) {
+                    showToast(`🚨 <strong>Compliance Alert:</strong> ${json.message}`, "error");
+                    checkCompliance();
+                } else {
+                    showToast(`❌ <strong>Transaction Failed:</strong> ${json.message}`, "error");
+                }
+            } catch (err) {
+                showToast("Network request error: " + err.message, "error");
+            }
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('modal-receipt').classList.add('hidden');
+        }
+
+        // --- QUICK CUSTOMER & PRESCRIPTION MODALS ---
+        function openNewCustomerModal() {
+            document.getElementById('modal-new-customer').classList.remove('hidden');
+        }
+        function closeNewCustomerModal() {
+            document.getElementById('modal-new-customer').classList.add('hidden');
+        }
+        async function submitNewCustomer(e) {
+            e.preventDefault();
+            const name = document.getElementById('modal-cust-name').value;
+            const phone = document.getElementById('modal-cust-phone').value;
+
+            try {
+                const res = await fetch('/api/customers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customer_name: name, phone })
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    showToast(`Patient '${name}' registered successfully!`, "success");
+                    await loadMetadata();
+                    document.getElementById('pos-customer-select').value = json.customer_id;
+                    onCustomerChange();
+                    closeNewCustomerModal();
+                } else {
+                    showToast(json.message, "error");
+                }
+            } catch (err) {
+                showToast(err.message, "error");
+            }
+        }
+
+        function openNewPrescriptionModal() {
+            const custId = document.getElementById('pos-customer-select').value;
+            if (!custId) {
+                showToast("Please choose or register a patient first.", "error");
+                return;
+            }
+            document.getElementById('modal-new-prescription').classList.remove('hidden');
+        }
+        function closeNewPrescriptionModal() {
+            document.getElementById('modal-new-prescription').classList.add('hidden');
+        }
+        async function submitNewPrescription(e) {
+            e.preventDefault();
+            const custId = parseInt(document.getElementById('pos-customer-select').value);
+            const doctor = document.getElementById('modal-rx-doctor').value;
+            const dateVal = document.getElementById('modal-rx-date').value;
+
+            try {
+                const res = await fetch('/api/prescriptions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customer_id: custId, doctor_name: doctor, issue_date: dateVal })
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    showToast(`Doctor Prescription attached successfully!`, "success");
+                    await loadMetadata();
+                    onCustomerChange();
+                    document.getElementById('pos-prescription-select').value = json.prescription_id;
+                    checkCompliance();
+                    closeNewPrescriptionModal();
+                } else {
+                    showToast(json.message, "error");
+                }
+            } catch (err) {
+                showToast(err.message, "error");
+            }
+        }
+
+        // --- EXPIRY WATCHLIST TAB ---
+        async function fetchNearExpiry() {
+            try {
+                const res = await fetch('/api/reports/near-expiry');
+                const json = await res.json();
+                if (json.status !== 'success') throw new Error(json.message);
+
+                const tbody = document.getElementById('expiry-tbody');
+                tbody.innerHTML = '';
+                const rows = json.data;
+
+                if (rows.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-slate-400">Great news! No batches are expiring within 30 days.</td></tr>`;
+                    return;
+                }
+
+                rows.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50/80 transition-colors";
+
+                    let statusBadge = '';
+                    if (r.DaysToExpiry < 0) {
+                        statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300">EXPIRED</span>`;
+                    } else if (r.DaysToExpiry <= 15) {
+                        statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">CRITICAL (${r.DaysToExpiry}d)</span>`;
+                    } else {
+                        statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-yellow-50 text-yellow-800 border border-yellow-200">NEAR-EXPIRY</span>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td class="py-3 px-4 font-mono font-bold text-slate-900">${r.BatchNumber}</td>
+                        <td class="py-3 px-4 font-bold text-slate-800">${r.MedicineName}</td>
+                        <td class="py-3 px-4 text-slate-500">${r.CategoryName}</td>
+                        <td class="py-3 px-4 text-slate-500">${r.ManufacturerName}</td>
+                        <td class="py-3 px-4 text-right font-bold text-slate-900">${r.StockQuantity}</td>
+                        <td class="py-3 px-4 font-mono text-slate-700">${r.ExpiryDate}</td>
+                        <td class="py-3 px-4 font-bold ${r.DaysToExpiry < 0 ? 'text-rose-600' : 'text-amber-600'}">
+                            ${r.DaysToExpiry < 0 ? `${Math.abs(r.DaysToExpiry)} days overdue` : `${r.DaysToExpiry} days left`}
+                        </td>
+                        <td class="py-3 px-4">${statusBadge}</td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="quickEditBatch(${r.BatchID}, ${r.StockQuantity}, ${r.UnitCost})" class="px-3 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors">
+                                Revise Batch
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                lucide.createIcons();
+            } catch (err) {
+                console.error("Expiry fetch error", err);
+            }
+        }
+
+        // --- MODULE C: INWARD INTAKE ---
+        function toggleMedicineMode() {
+            const mode = document.querySelector('input[name="medicine_mode"]:checked').value;
+            if (mode === 'new') {
+                document.getElementById('intake-new-group').classList.remove('hidden');
+                document.getElementById('intake-existing-group').classList.add('hidden');
+            } else {
+                document.getElementById('intake-new-group').classList.add('hidden');
+                document.getElementById('intake-existing-group').classList.remove('hidden');
+            }
+        }
+
+        function autoGenerateBatchNumber() {
+            const rand = Math.floor(100 + Math.random() * 900);
+            document.getElementById('intake-batch').value = `B-LOT-${rand}`;
+        }
+
+        async function submitInwardIntake(e) {
+            e.preventDefault();
+            const mode = document.querySelector('input[name="medicine_mode"]:checked').value;
+
+            const payload = {
+                is_new_medicine: mode === 'new',
+                supplier_id: document.getElementById('intake-supplier').value,
+                batch_number: document.getElementById('intake-batch').value,
+                stock_quantity: document.getElementById('intake-quantity').value,
+                unit_cost: document.getElementById('intake-cost').value,
+                expiry_date: document.getElementById('intake-expiry').value
+            };
+
+            if (mode === 'new') {
+                payload.medicine_name = document.getElementById('intake-name').value;
+                payload.category_id = document.getElementById('intake-category').value;
+                payload.manufacturer_id = document.getElementById('intake-manufacturer').value;
+                payload.is_restricted = document.getElementById('intake-restricted').checked;
+            } else {
+                payload.medicine_id = document.getElementById('intake-existing-med').value;
+                if (!payload.medicine_id) {
+                    showToast("Please choose an existing medicine from catalog.", "error");
+                    return;
+                }
+            }
+
+            try {
+                const res = await fetch('/api/medicines', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-User-Role': currentRole
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    showToast(`✅ <strong>Intake Success:</strong> ${json.message}`, "success");
+                    await loadMetadata();
+                    await fetchInventory();
+                    switchTab('inventory-tab');
+                } else {
+                    showToast(`❌ <strong>Intake Error:</strong> ${json.message}`, "error");
+                }
+            } catch (err) {
+                showToast("Request error: " + err.message, "error");
+            }
+        }
+
+        // --- MODULE D: BATCH & PRICE UPDATE ---
+        function populateUpdateBatchDropdown(batches) {
+            const sel = document.getElementById('update-batch-select');
+            if (!sel) return;
+            sel.innerHTML = '<option value="">-- Choose Batch to Revise --</option>';
+            batches.forEach(b => {
+                sel.innerHTML += `<option value="${b.BatchID}">Batch #${b.BatchNumber} - ${b.MedicineName} (Current Stock: ${b.StockQuantity})</option>`;
+            });
+        }
+
+        function quickEditBatch(batchId, stock, cost) {
+            if (currentRole === 'Pharmacist') {
+                showToast("Access Restricted: Pharmacists cannot revise stock or costs.", "error");
+                return;
+            }
+            switchTab('updater-tab');
+            document.getElementById('update-batch-select').value = batchId;
+            document.getElementById('update-stock').value = stock;
+            document.getElementById('update-cost').value = cost;
+        }
+
+        function onBatchSelectForUpdate() {
+            const batchId = parseInt(document.getElementById('update-batch-select').value);
+            const batch = rawInventory.find(b => b.BatchID === batchId);
+            if (batch) {
+                document.getElementById('update-stock').value = batch.StockQuantity;
+                document.getElementById('update-cost').value = batch.UnitCost;
+            }
+        }
+
+        async function submitUpdate(e) {
+            e.preventDefault();
+            const batchId = document.getElementById('update-batch-select').value;
+            if (!batchId) {
+                showToast("Please select a target batch.", "error");
+                return;
+            }
+
+            const payload = {
+                stock_quantity: document.getElementById('update-stock').value,
+                unit_cost: document.getElementById('update-cost').value
+            };
+
+            try {
+                const res = await fetch(`/api/batches/${batchId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-User-Role': currentRole
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    showToast(`✅ <strong>UPDATE Executed:</strong> ${json.message}`, "success");
+                    await fetchInventory();
+                    switchTab('inventory-tab');
+                } else {
+                    showToast(`❌ <strong>UPDATE Failed:</strong> ${json.message}`, "error");
+                }
+            } catch (err) {
+                showToast("Error updating: " + err.message, "error");
+            }
+        }
+
+        // --- MODULE E: CATALOG DELETION (STANDARD & CASCADE) ---
+        async function executeStandardDelete() {
+            const medId = document.getElementById('delete-med-select').value;
+            if (!medId) {
+                showToast("Please select a medicine to delete.", "error");
+                return;
+            }
+
+            document.getElementById('fk-blocked-modal').classList.add('hidden');
+
+            try {
+                const res = await fetch(`/api/medicines/${medId}`, {
+                    method: 'DELETE',
+                    headers: { 'X-User-Role': currentRole }
+                });
+                const json = await res.json();
+
+                if (res.status === 200 && json.status === 'success') {
+                    showToast(`✅ <strong>Record Purged:</strong> ${json.message}`, "success");
+                    await loadMetadata();
+                    await fetchInventory();
+                } else if (res.status === 409 || json.status === 'blocked') {
+                    const modal = document.getElementById('fk-blocked-modal');
+                    const text = document.getElementById('fk-blocked-text');
+                    text.innerHTML = `<strong>Action Intercepted: Referential Integrity Constraint Active.</strong> This drug has existing stock batches or completed sales records. MySQL rejected deletion with error <code>1451</code>. Use <em>'Force Cascade Clean Deletion'</em> if you intend to purge all dependencies.`;
+                    modal.classList.remove('hidden');
+                    targetCascadeMedicineId = medId;
+                    showToast(`🛡️ <strong>Integrity Constraint:</strong> Cannot delete active referenced drug.`, "blocked");
+                } else {
+                    showToast(`❌ <strong>Error:</strong> ${json.message}`, "error");
+                }
+            } catch (err) {
+                showToast("Deletion error: " + err.message, "error");
+            }
+        }
+
+        function promptCascadeDeleteModal() {
+            const medId = document.getElementById('delete-med-select').value;
+            if (!medId) {
+                showToast("Please select a medicine first.", "error");
+                return;
+            }
+            targetCascadeMedicineId = medId;
+            const med = metadata.medicines.find(m => m.MedicineID === parseInt(medId));
+            document.getElementById('cascade-med-name').innerText = med ? `${med.MedicineName} (ID #${med.MedicineID})` : `Medicine #${medId}`;
+            document.getElementById('modal-cascade-confirm').classList.remove('hidden');
+        }
+
+        function promptCascadeDeleteModalFromAlert() {
+            document.getElementById('fk-blocked-modal').classList.add('hidden');
+            const med = metadata.medicines.find(m => m.MedicineID === parseInt(targetCascadeMedicineId));
+            document.getElementById('cascade-med-name').innerText = med ? `${med.MedicineName} (ID #${med.MedicineID})` : `Medicine #${targetCascadeMedicineId}`;
+            document.getElementById('modal-cascade-confirm').classList.remove('hidden');
+        }
+
+        function closeCascadeModal() {
+            document.getElementById('modal-cascade-confirm').classList.add('hidden');
+        }
+
+        async function commitCascadeDelete() {
+            if (!targetCascadeMedicineId) return;
+
+            try {
+                const res = await fetch(`/api/medicines/${targetCascadeMedicineId}/cascade`, {
+                    method: 'DELETE',
+                    headers: { 'X-User-Role': currentRole }
+                });
+                const json = await res.json();
+                closeCascadeModal();
+
+                if (json.status === 'success') {
+                    showToast(`🔥 <strong>Cascade Purge Executed:</strong> ${json.message}`, "success");
+                    await loadMetadata();
+                    await fetchInventory();
+                    await fetchNearExpiry();
+                    switchTab('inventory-tab');
+                } else {
+                    showToast(`❌ <strong>Cascade Error:</strong> ${json.message}`, "error");
+                }
+            } catch (err) {
+                showToast("Cascade request error: " + err.message, "error");
+            }
+        }
+
+        async function createDemoDrug() {
+            try {
+                const res = await fetch('/api/medicines/demo-safe', {
+                    method: 'POST',
+                    headers: { 'X-User-Role': currentRole }
+                });
+                const json = await res.json();
+                if (json.status === 'success') {
+                    document.getElementById('demo-drug-status').innerText = `Created: ID #${json.medicine_id}`;
+                    showToast(`Created standalone trial drug '${json.medicine_name}'!`, "success");
+                    await loadMetadata();
+                    document.getElementById('delete-med-select').value = json.medicine_id;
+                } else {
+                    showToast(json.message, "error");
+                }
+            } catch (err) {
+                showToast(err.message, "error");
+            }
+        }
+
+
+        // --- MOVEMENTS AUDIT TRAIL ---
+        async function fetchStockMovements() {
+            try {
+                const res = await fetch('/api/reports/movements');
+                const json = await res.json();
+                if (json.status !== 'success') return;
+
+                const tbody = document.getElementById('movements-tbody');
+                tbody.innerHTML = '';
+
+                json.data.forEach(m => {
+                    const tr = document.createElement('tr');
+                    let deltaColor = m.Quantity > 0 ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold';
+                    tr.innerHTML = `
+                        <td class="py-3 px-4 font-mono font-semibold text-slate-500">#${m.MovementID}</td>
+                        <td class="py-3 px-4 font-bold text-slate-800">${m.MedicineName}</td>
+                        <td class="py-3 px-4 font-mono text-slate-700">${m.BatchNumber}</td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${m.MovementType === 'Stock In' ? 'bg-emerald-50 text-emerald-700' : m.MovementType === 'POS Dispensed' ? 'bg-teal-50 text-teal-700' : 'bg-slate-100 text-slate-700'}">
+                                ${m.MovementType}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-right font-mono ${deltaColor}">${m.Quantity > 0 ? `+${m.Quantity}` : m.Quantity}</td>
+                        <td class="py-3 px-4 text-slate-500 font-mono">${m.MovementDate}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Movements error", err);
+            }
+        }
+    </script>
+</body>
+
+</html>
