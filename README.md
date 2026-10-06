@@ -4,8 +4,7 @@
 A normalized 3NF relational database system (MySQL 8.0) and clinical web dashboard built with Python (Flask) and Tailwind CSS, featuring 3-tier Role-Based Access Control (RBAC).
 
 ## Academic Credentials
-- **Lead Developer:** Y. Abhinav Sri Ram (25WU0101158)
-- **Team Members:** M. Harshavardhan Reddy, K. Pranay, M. Sai Manoj, M. Manoj Sri Sathya Charan
+- **Developer:** Y. Abhinav Sri Ram (25WU0101158)
 - **Course:** Database Management Systems (CSE2101)
 - **Faculty Supervisor:** Dr. Kiran Mayee Advala
 - **Institution:** School of Technology, Woxsen University
